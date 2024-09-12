@@ -31,7 +31,7 @@ class Card:
 
 # 定义牌堆
 class Deck:
-    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    suits = ['♥️', '♦️', '♣️', '♠️']
     values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     
     def __init__(self):
@@ -45,9 +45,13 @@ class Deck:
         return self.cards.pop()
 
 # 绘制扑克牌
+# Adjusted draw_card function to calculate card text width and space dynamically
 def draw_card(card, x, y):
-    text = font.render(str(card), True, WHITE)
+    card_text = str(card)
+    text = font.render(card_text, True, WHITE)
     screen.blit(text, (x, y))
+    return text.get_width()  # Return the width of the card text
+
 
 # 绘制按钮
 def draw_button(text, x, y, width, height, color):
@@ -63,6 +67,20 @@ def initialize_hands():
     return [deck.deal(), deck.deal()], [deck.deal(), deck.deal()]
 
 player_hand, dealer_hand = initialize_hands()
+
+# Game loop: Displaying player's and dealer's cards with dynamic spacing
+# Display player's cards
+x_offset = 100  # Initial X position
+spacing = 20    # Extra spacing between cards
+for card in player_hand:
+    card_width = draw_card(card, x_offset, 400)
+    x_offset += card_width + spacing  # Move X position for the next card
+
+# Display dealer's cards
+x_offset = 100  # Initial X position
+for card in dealer_hand:
+    card_width = draw_card(card, x_offset, 100)
+x_offset += card_width + spacing  # Move X position for the next card
 
 # 计算手牌总值的函数
 def calculate_hand_value(hand):

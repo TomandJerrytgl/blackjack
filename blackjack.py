@@ -22,7 +22,7 @@ large_font = pygame.font.SysFont("Arial", 48)
 
 #定义筹码
 class chip:
-    def __init__(self,value,color)
+    def __init__(self,value,color):
         self.value=value
         self.color=color
         self.size=50

@@ -25,13 +25,13 @@ class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
-        self.height=100
-        self.width=50
+        self.height = 140
+        self.width= self.height/1.4
         self.color="white"
         
     
     def __repr__(self):
-        return f"{self.value} of {self.suit}"
+        return f"{self.value} {self.suit}"
 
 # 定义牌堆
 class Deck:
@@ -53,7 +53,7 @@ class Deck:
 def draw_card(card, x, y):
     pygame.draw.rect(screen, card.color, (x, y, card.width, card.height))
     card_text = str(card)
-    text = font.render(card_text, True, WHITE)
+    text = font.render(card_text, True, BLACK)
     screen.blit(text, (x, y))
     return text.get_width()  # Return the width of the card text
 
@@ -73,19 +73,19 @@ def initialize_hands():
 
 player_hand, dealer_hand = initialize_hands()
 
-# Game loop: Displaying player's and dealer's cards with dynamic spacing
-# Display player's cards
-x_offset = 100  # Initial X position
-spacing = 20    # Extra spacing between cards
-for card in player_hand:
-    card_width = draw_card(card, x_offset, 400)
-    x_offset += card_width + spacing  # Move X position for the next card
+    # # Game loop: Displaying player's and dealer's cards with dynamic spacing
+    # # Display player's cards
+    # x_offset = 100  # Initial X position
+    # spacing = 20    # Extra spacing between cards
+    # for card in player_hand:
+    #     card_width = draw_card(card, x_offset, 400)
+    #     x_offset += card_width + spacing  # Move X position for the next card
 
-# Display dealer's cards
-x_offset = 100  # Initial X position
-for card in dealer_hand:
-    card_width = draw_card(card, x_offset, 100)
-x_offset += card_width + spacing  # Move X position for the next card
+    # # Display dealer's cards
+    # x_offset = 100  # Initial X position
+    # for card in dealer_hand:
+    #     card_width = draw_card(card, x_offset, 100)
+    # x_offset += card_width + spacing  # Move X position for the next card
 
 # 计算手牌总值的函数
 def calculate_hand_value(hand):
@@ -156,10 +156,11 @@ while running:
     screen.fill(GREEN)
     
     # 显示玩家和庄家的牌
+    Spacing = 50
     for i, card in enumerate(player_hand):
-        draw_card(card, 100 + i * 100, 400)
+        draw_card(card, 100 + i * (card.width+Spacing), 400)
     for i, card in enumerate(dealer_hand):
-        draw_card(card, 100 + i * 100, 100)
+        draw_card(card, 100 + i * (card.width+Spacing), 100)
     
     # 绘制按钮
     if player_turn and not game_over:

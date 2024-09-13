@@ -26,7 +26,7 @@ class chip:
     def __init__(self,value,color):
         self.value=value
         self.color=color
-        self.size=50
+        self.size=25
         
 
 
@@ -69,8 +69,9 @@ def draw_card(card, x, y):
 
 #绘制筹码
 def draw_chips(chip,x,y):
-    pygame.draw.circle(screen,chip.color,(x,y）,chip.size,0)
-    text=font.render(chip.value,True,BLACK)
+    pygame.draw.circle(screen,chip.color,(x,y),chip.size,0)
+    value_text=str(chip.value)
+    text=font.render(value_text,True,WHITE)
     screen.blit(text, (x, y))
     
     
@@ -182,8 +183,8 @@ while running:
     for i, card in enumerate(dealer_hand):
         draw_card(card, 100 + i * (card.width+Spacing), 100)
     for i in range(len(chipslist)):
-        chip=chip(chipslist[i],chipscolor[i])
-        draw_chips(chip,200+i*60,200)    
+        chipp=chip(chipslist[i],chipscolor[i])
+        draw_chips(chipp,300+i*60,300)    
 
     
     

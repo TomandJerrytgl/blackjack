@@ -69,7 +69,7 @@ def draw_card(card, x, y):
 
 #绘制筹码
 def draw_chips(chip,x,y):
-    pygame.draw.circle(screen,chip.color,x,y,chip.size,0)
+    pygame.draw.circle(screen,chip.color,(x,y）,chip.size,0)
     text=font.render(chip.value,True,BLACK)
     screen.blit(text, (x, y))
     

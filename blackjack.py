@@ -180,7 +180,7 @@ while running:
         draw_card(card, 100 + i * (card.width+Spacing), 400)
     for i, card in enumerate(dealer_hand):
         draw_card(card, 100 + i * (card.width+Spacing), 100)
-    for i<len(chipslist):
+    for i in range(len(chipslist)):
         chip=chip(chipslist(i),chipscolor(i))
         draw_chips(chip,200+i*60,200)    
 

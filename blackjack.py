@@ -15,6 +15,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 128, 0)
 RED = (255, 0, 0)
+ORANGE=(255,165,0)
 
 # 定义字体
 font = pygame.font.SysFont("Arial", 24)
@@ -181,7 +182,7 @@ while running:
     for i, card in enumerate(dealer_hand):
         draw_card(card, 100 + i * (card.width+Spacing), 100)
     for i in range(len(chipslist)):
-        chip=chip(chipslist(i),chipscolor(i))
+        chip=chip(chipslist[i],chipscolor[i])
         draw_chips(chip,200+i*60,200)    
 
     

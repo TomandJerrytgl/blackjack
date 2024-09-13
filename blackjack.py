@@ -20,6 +20,15 @@ RED = (255, 0, 0)
 font = pygame.font.SysFont("Arial", 24)
 large_font = pygame.font.SysFont("Arial", 48)
 
+#定义筹码
+class chip:
+    def __init__(self,value,color)
+        self.value=value
+        self.color=color
+        self.size=50
+        
+
+
 # 定义扑克牌
 class Card:
     def __init__(self, suit, value):
@@ -56,6 +65,14 @@ def draw_card(card, x, y):
     text = font.render(card_text, True, BLACK)
     screen.blit(text, (x, y))
     return text.get_width()  # Return the width of the card text
+
+#绘制筹码
+def draw_chips(chip,x,y):
+    pygame.draw.circle(screen,chip.color,x,y,chip.size,0)
+    text=font.render(chip.value,True,BLACK)
+    screen.blit(text, (x, y))
+    
+    
 
 
 # 绘制按钮
@@ -124,6 +141,7 @@ running = True
 player_turn = True
 game_over = False
 winner_text = ""
+chipslist=[5,25,100,500]
 
 while running:
     for event in pygame.event.get():
@@ -161,6 +179,10 @@ while running:
         draw_card(card, 100 + i * (card.width+Spacing), 400)
     for i, card in enumerate(dealer_hand):
         draw_card(card, 100 + i * (card.width+Spacing), 100)
+    for i<len(chipslist):
+        draw_chips(chip,200+i*60,200)    
+
+    
     
     # 绘制按钮
     if player_turn and not game_over:

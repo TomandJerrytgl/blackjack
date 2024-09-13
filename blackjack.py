@@ -142,6 +142,7 @@ player_turn = True
 game_over = False
 winner_text = ""
 chipslist=[5,25,100,500]
+chipscolor=["RED","GREEN","BLACK","ORANGE"]
 
 while running:
     for event in pygame.event.get():
@@ -180,6 +181,7 @@ while running:
     for i, card in enumerate(dealer_hand):
         draw_card(card, 100 + i * (card.width+Spacing), 100)
     for i<len(chipslist):
+        chip=chip(chipslist(i),chipscolor(i))
         draw_chips(chip,200+i*60,200)    
 
     

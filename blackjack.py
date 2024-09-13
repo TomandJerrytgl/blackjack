@@ -25,8 +25,8 @@ class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
-        self.height=10
-        self.width=5
+        self.height=100
+        self.width=50
         self.color="white"
         
     

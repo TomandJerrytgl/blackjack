@@ -25,6 +25,10 @@ class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
+        self.height=10
+        self.width=5
+        self.color="white"
+        
     
     def __repr__(self):
         return f"{self.value} of {self.suit}"
@@ -47,6 +51,7 @@ class Deck:
 # 绘制扑克牌
 # Adjusted draw_card function to calculate card text width and space dynamically
 def draw_card(card, x, y):
+    pygame.draw.rect(screen, card.color, (x, y, card.width, card.height))
     card_text = str(card)
     text = font.render(card_text, True, WHITE)
     screen.blit(text, (x, y))

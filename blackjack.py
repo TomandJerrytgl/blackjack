@@ -1,6 +1,7 @@
 import pygame
 import random
 import pdb
+from tabulate import tabulate
 
 # 初始化Pygame
 pygame.init()
@@ -143,15 +144,31 @@ class Deck:
     
     def read(self, dict):
         # Counting number of cards
-        # Print out the deck status
+        # Print out the deck status in table format
         total_tmp = 0
+        dict_table = []
+        inside_b = True
         for suit in self.suits:
+            row_counter = 0
             for value in self.values:
                 card_face = (suit, value)
-                print("{}: {}".format(card_face, dict[card_face])) # Print cards number of the same suit and value
+                len_values, len_suits = len(self.values), len(self.suits)
+                
+                if inside_b:
+                    dict_table.append(["Cards: ", dict[card_face], suit+"  "+value])
+                else:
+                    dict_table[row_counter].extend(["|", dict[card_face], suit+"  "+value])
+                    row_counter += 1
+                
+                # print("{}: {}".format(card_face, dict[card_face])) # Print cards number of the same suit and value
                 total_tmp += dict[card_face] # Count the cards into total number
+            inside_b = False
+        print(tabulate(dict_table))
+
         dict["total"] = total_tmp
         print("total: {}".format(dict["total"]))
+
+
     
     def deal(self):
         print("_____________________dealling_______________")
@@ -226,18 +243,7 @@ def check_winner(player_hand, dealer_hand):
 
 # 游戏主循环
 ## 初始化牌堆
-<<<<<<< HEAD
-chipcolor_dict = {5: "RED",
-         25: "GREEN",
-         100: "BLACK",
-         500: "ORANGE"}
-
 deck = Deck()
-#pdb.set_trace()
-=======
-deck = Deck()
-pdb.set_trace()
->>>>>>> 8dae3fe94e34ba068aecd32d7db9001026993e06
 
 player_hand, dealer_hand = initialize_hands()
 
@@ -254,16 +260,8 @@ player_hand, dealer_hand = initialize_hands()
     # for card in dealer_hand:
     #     card_width = draw_card(card, x_offset, 100)
     # x_offset += card_width + spacing  # Move X position for the next card
-<<<<<<< HEAD
-#创建按钮
-hit_button = Button((100, 500), "Hit")
-stand_button = Button((300, 500), "Stand")
-restart_button = Button((500, 500), "Restart")
-    
-=======
 
 
->>>>>>> 8dae3fe94e34ba068aecd32d7db9001026993e06
 running = True
 player_turn = True
 game_over = False

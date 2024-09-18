@@ -226,6 +226,7 @@ def check_winner(player_hand, dealer_hand):
 
 # 游戏主循环
 ## 初始化牌堆
+<<<<<<< HEAD
 chipcolor_dict = {5: "RED",
          25: "GREEN",
          100: "BLACK",
@@ -233,6 +234,10 @@ chipcolor_dict = {5: "RED",
 
 deck = Deck()
 #pdb.set_trace()
+=======
+deck = Deck()
+pdb.set_trace()
+>>>>>>> 8dae3fe94e34ba068aecd32d7db9001026993e06
 
 player_hand, dealer_hand = initialize_hands()
 
@@ -249,11 +254,16 @@ player_hand, dealer_hand = initialize_hands()
     # for card in dealer_hand:
     #     card_width = draw_card(card, x_offset, 100)
     # x_offset += card_width + spacing  # Move X position for the next card
+<<<<<<< HEAD
 #创建按钮
 hit_button = Button((100, 500), "Hit")
 stand_button = Button((300, 500), "Stand")
 restart_button = Button((500, 500), "Restart")
     
+=======
+
+
+>>>>>>> 8dae3fe94e34ba068aecd32d7db9001026993e06
 running = True
 player_turn = True
 game_over = False

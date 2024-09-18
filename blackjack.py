@@ -243,6 +243,15 @@ def check_winner(player_hand, dealer_hand):
 
 # 游戏主循环
 ## 初始化牌堆
+
+chipcolor_dict = {5: "RED",
+         25: "GREEN",
+         100: "BLACK",
+         500: "ORANGE"}
+
+deck = Deck()
+#pdb.set_trace()
+
 deck = Deck()
 
 player_hand, dealer_hand = initialize_hands()

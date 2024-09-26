@@ -1,75 +1,96 @@
 import pygame
 import random
+import pdb
+from tabulate import tabulate
+
+pygame.init()
+SCREEN_WIDTH = 1600
+SCREEN_HEIGHT = 900
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Blackjack")
     
-color = {5: "RED",
+chipcolor_dict = {5: "RED",
          25: "GREEN",
          100: "BLACK",
          500: "ORANGE"}
+# 定义颜色
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREEN = (0, 128, 0)
+RED = (255, 0, 0)
+ORANGE=(255,165,0)
 
+# 定义字体
+font = pygame.font.SysFont("Arial", 24)
+large_font = pygame.font.SysFont("Arial", 48)
 
-class Card:
-    def __init__(self, suit, value):
-        self.suit = suit  # 花色
-        self.value = value  # 牌值
-        self.width = 50  # 卡片宽度
-        self.height = 80  # 卡片高度
-        self.color = (255, 255, 255)  # 卡片颜色
-
-    def __str__(self):
-        return f"{self.value}{self.suit}"
-
+#定义筹码
 class Chip:
     def __init__(self, position, value):
         self.x, self.y = position  
         self.value = value
-        self.color = color[value]  
+        self.color = chipcolor_dict[value]  
         self.size = 50  
 
     # 绘制芯片
-    def draw_chip(self, screen, font, WHITE):
+    def draw_chip(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size, 0)  # 绘制芯片
         value_text = str(self.value)
         text = font.render(value_text, True, WHITE)  
         screen.blit(text, (self.x, self.y))  
 
     # 判断芯片是否被点击
-    def chip_is_clicked(self, x, y):
+    def is_clicked(self, mouse_pos):
+        x,y=mouse_pos
 
         if (self.x - x) ** 2 + (self.y - y) ** 2 < self.size ** 2:
             return True
         return False
 
-
-
 class Button:
     def __init__(self, position, text):
         self.x, self.y = position  # 按钮位置
-        self.text = text  # 按钮文本
+        self.text = str(text)  # 按钮文本
         self.color = "WHITE"  # 按钮背景颜色
         self.width, self.height = 100, 50  # 按钮的宽度和高度
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)  # 定义按钮的矩形区域
 
     # 绘制按钮
-    def draw_button(self, screen, font, BLACK):
+    def draw_button(self, screen):
         # 绘制按钮矩形
         pygame.draw.rect(screen, self.color, self.rect, 0)
 
         # 渲染文本
-        text_surf = font.render(self.text, True, BLACK)
+        text_surf = font.render(self.text, True, "BLACK")
         text_rect = text_surf.get_rect(center=self.rect.center)  # 将文本居中
 
         # 在按钮上绘制文本
         screen.blit(text_surf, text_rect)
 
         # 绘制按钮的边框
-        pygame.draw.rect(screen, "BLACK", self.rect, 5)
+        pygame.draw.rect(screen, "BLACK", self.rect, 3)
 
     # 检查按钮是否被点击
     def is_clicked(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos)
 
+        
 
 
+# 定义扑克牌
+class Card:
+    def __init__(self, suit, value):
+        self.suit = suit
+        self.value = value
+        self.height = 140
+        self.width= self.height/1.4
+        self.color="white"
+        
+    
+    def __repr__(self):
+        return f"{self.suit} {self.value}"
+
+# 定义牌堆
 class Deck:
     '''
     Deck: type
@@ -125,15 +146,31 @@ class Deck:
     
     def read(self, dict):
         # Counting number of cards
-        # Print out the deck status
+        # Print out the deck status in table format
         total_tmp = 0
+        dict_table = []
+        inside_b = True
         for suit in self.suits:
+            row_counter = 0
             for value in self.values:
                 card_face = (suit, value)
-                print("{}: {}".format(card_face, dict[card_face])) # Print cards number of the same suit and value
+                len_values, len_suits = len(self.values), len(self.suits)
+                
+                if inside_b:
+                    dict_table.append(["Cards: ", dict[card_face], suit+"  "+value])
+                else:
+                    dict_table[row_counter].extend(["|", dict[card_face], suit+"  "+value])
+                    row_counter += 1
+                
+                # print("{}: {}".format(card_face, dict[card_face])) # Print cards number of the same suit and value
                 total_tmp += dict[card_face] # Count the cards into total number
+            inside_b = False
+        print(tabulate(dict_table))
+
         dict["total"] = total_tmp
         print("total: {}".format(dict["total"]))
+
+
     
     def deal(self):
         print("_____________________dealling_______________")
@@ -156,11 +193,23 @@ def draw_card(card, x, y):
     screen.blit(text, (x, y))
     return text.get_width()  # Return the width of the card text
 
+#绘制筹码
+def draw_chips(chip,x,y):
+    pygame.draw.circle(screen,chip.color,(x,y),chip.size,0)
+    value_text=str(chip.value)
+    text=font.render(value_text,True,WHITE)
+    screen.blit(text, (x, y))
+
+
+# 绘制按钮
+def draw_button(text, x, y, width, height, color):
+    pygame.draw.rect(screen, color, (x, y, width, height))
+    text_surf = font.render(text, True, BLACK)
+    screen.blit(text_surf, (x + (width - text_surf.get_width()) // 2, y + (height - text_surf.get_height()) // 2))
 
 # 初始化玩家和庄家的手牌
 def initialize_hands(deck):
     return [deck.deal(), deck.deal()], [deck.deal(), deck.deal()]
-
 
 # 计算手牌总值的函数
 def calculate_hand_value(hand):
@@ -184,12 +233,36 @@ def check_winner(player_hand, dealer_hand):
     player_value = calculate_hand_value(player_hand)
     dealer_value = calculate_hand_value(dealer_hand)
     if player_value > 21:
+        
         return "Player Busts! Dealer Wins!"
     elif dealer_value > 21:
+        
         return "Dealer Busts! Player Wins!"
     elif player_value == dealer_value:
+        
         return "It's a Tie!"
     elif player_value > dealer_value:
+        
         return "Player Wins!"
     else:
+        
         return "Dealer Wins!"
+
+def check_reward(player_hand, dealer_hand):
+    player_value = calculate_hand_value(player_hand)
+    dealer_value = calculate_hand_value(dealer_hand)
+    if player_value > 21:
+        
+        return 0
+    elif dealer_value > 21:
+        
+        return 2
+    elif player_value == dealer_value:
+        
+        return 1
+    elif player_value > dealer_value:
+        
+        return 2
+    else:
+        
+        return 0

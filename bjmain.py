@@ -109,11 +109,7 @@ def main():
                             dealer_hand.append(deck.deal())
                         game_over = True
                         winner_text = check_winner(player_hand, dealer_hand)
-                        rewardrate=check_reward(player_hand, dealer_hand)
-                        current_money=current_money+bet_money*rewardrate
-                        bet_money=0
-                        crmoney_button=Button((800,800),current_money)
-                        btmoney_button=Button((800,100),bet_money)
+                        
                 elif game_over:
                     if restart_button.is_clicked(event.pos):
                         deck = Deck()
@@ -122,11 +118,26 @@ def main():
                         game_over = False
                         putting_bet=False
                         winner_text = ""
+        
+        #结算金钱
+        if game_over:
+            rewardrate=check_reward(player_hand, dealer_hand)
+            current_money=current_money+bet_money*rewardrate
+            bet_money=0
+            crmoney_button=Button((800,800),current_money)
+            btmoney_button=Button((800,100),bet_money)
+        
+
+
+        
+        
         #绘制背景
         screen.fill(GREEN)
         crmoney_button.draw_button(screen)
         btmoney_button.draw_button(screen)
         quit_button.draw_button(screen)
+
+        
 
         
 
@@ -137,6 +148,8 @@ def main():
             chips_100.draw_chip(screen)
             chips_500.draw_chip(screen)
             deal_button.draw_button(screen)
+
+        
 
         #绘制按钮
         if player_turn and putting_bet and not game_over:

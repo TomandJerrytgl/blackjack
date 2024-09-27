@@ -106,8 +106,27 @@ class Deck:
             # card_face = (card.suit, card.value)
             # "total" string
         # Value: Integer
+
+    drawed_dict = {}
     
-    showed_dict = {}
+    deck_calc = [] # 以适合计算的方式记录牌堆情况
+    # 数据结构.
+    # deck_calc[i][k] 是一个整数.
+        # 这个整数代表这个牌的数量.
+        # i,j 对应大小和花色. 
+            # i: 'A'=0, '2'=1, '3'=2, ..., 'J'=10, 'Q'=11, 'K'=12
+            # j: '♠️'=0, '♥️'=1, '♦️'=2, '♣️'=3
+    for i in range(13):
+        deck_calc.append([0,0,0,0])
+
+    def face_to_int(self, str):
+        # 把 Card Face 转化成可以用在deck_calc数据结构中对应位置的 integer
+        if str.isdigit():
+            return int(str)
+        else:
+            face_map = {'♠️': 0, '♥️': 1, '♦️': 2, '♣️': 3, "A":0, "J":10, "Q":11, "K":12}
+            return face_map.get(str, -1)  # Returns -1 if the suit is not found
+
     
     
     def __init__(self):
@@ -130,18 +149,23 @@ class Deck:
             card_face = (card_tmp.suit, card_tmp.value)
             self.deck_dict[card_face] = self.deck_dict[card_face]+1
             total_tmp += 1
+
+            #初始化deck_calc
+            self.deck_calc[self.face_to_int(card_tmp.value)]\
+                [self.face_to_int(card_tmp.suit)] += 1
+            
         self.deck_dict["total"] = total_tmp
 
         
-        # Intiate key-values pairs for the showed_dict variable
-        self.showed_dict["total"] = 0
+        # Intiate key-values pairs for the drawed_dict variable
+        self.drawed_dict["total"] = 0
         for card in self.cards:
             card_face = (card.suit, card.value)
-            self.showed_dict[card_face] = 0
+            self.drawed_dict[card_face] = 0
 
         # Read the information of this fresh deck!
         self.read(self.deck_dict)
-        self.read(self.showed_dict)
+        self.read(self.drawed_dict)
     
     def shuffle(self):
         random.shuffle(self.cards)
@@ -180,10 +204,10 @@ class Deck:
         x = self.cards.pop()
         # Update the status (remove the poped card from the status)
         self.deck_dict[(x.suit,x.value)] = self.deck_dict[(x.suit,x.value)]-1
-        self.showed_dict[(x.suit,x.value)] = self.showed_dict[(x.suit,x.value)]+1
+        self.drawed_dict[(x.suit,x.value)] = self.drawed_dict[(x.suit,x.value)]+1
 
         self.read(self.deck_dict)
-        self.read(self.showed_dict)
+        self.read(self.drawed_dict)
         return x
 
     def calculate(self, hand, n):

@@ -102,7 +102,10 @@ class Deck:
     deck_num = 5 #number of card decks used.
     
     deck_dict = {} #Data type: Dictionary. Number of cards
-    # Keys: card faces, "total"
+        # Keys: card_face, "total"
+            # card_face = (card.suit, card.value)
+            # "total" string
+        # Value: Integer
     
     showed_dict = {}
     
@@ -182,6 +185,31 @@ class Deck:
         self.read(self.deck_dict)
         self.read(self.showed_dict)
         return x
+
+    def calculate(self, hand, n):
+        # Variables
+            # hand: list of card
+                # Coudl be player_hand, or dealer_hand
+            # n: integer
+                # Target total value
+
+        # 根据已经被抽的牌, 算出未来牌的概率
+        used_cards = self.deck_dict
+        
+        pdb.set_trace()
+
+        # 计算手上牌的总和
+        sum_hand = 0
+        for i in range(len(hand)):
+            if hand[i].value == "A":
+                sum_hand += 1
+            if hand[i].value in ("j", "q", "k"):
+                sum_hand += 10
+            else:
+                sum_hand += hand[i].value
+
+        # 手上牌到 target value 的差值
+        diff = n - sum_hand
     
 
 # 绘制扑克牌

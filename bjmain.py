@@ -118,6 +118,7 @@ def main():
                         game_over = False
                         putting_bet=False
                         winner_text = ""
+                # deck.calculate(player_hand,21)
         
         #结算金钱
         if game_over:

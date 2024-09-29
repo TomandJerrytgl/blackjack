@@ -232,6 +232,16 @@ class Deck:
             else:
                 list_tmp[9] += sum_tmp
         return list_tmp
+    
+    def get_prob_list(self, list):
+        # 从此刻牌库数量, 算出抽到每一张卡的概率
+        total = sum(list)
+        list_tmp = []
+        for i in list:
+            list_tmp.append(i/total)
+        
+        return list_tmp
+
 
     def calculate_prob(self, hand, n):
         # Variables
@@ -242,22 +252,34 @@ class Deck:
 
         # 根据已经被抽的牌, 算出未来牌的概率
         calc_data = self.deck_calc_convert(self.deck_calc)
-
-        pdb.set_trace()
-        
-
+        prob_list = self.get_prob_list(calc_data)
         # 计算手上牌的总和
         sum_hand = 0
         for i in range(len(hand)):
-            if hand[i].value == "A":
+            if hand[i].value in ("A"):
                 sum_hand += 1
-            if hand[i].value in ("j", "q", "k"):
+            elif hand[i].value in ("J", "Q", "K"):
                 sum_hand += 10
             else:
-                sum_hand += hand[i].value
+                sum_hand += int(hand[i].value)
 
-        # 手上牌到 target value 的差值
-        diff = n - sum_hand
+
+        # 邓壹凡写的算法(临时版)
+        final_list=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        current_pt = sum_hand
+        while current_pt <= 16:
+            for i in range(1,10):
+                nextpoint=current_pt+i
+                if nextpoint>=22:
+                    nextpoint=22
+                if final_list[nextpoint-1]==0:
+                    final_list[nextpoint-1]=final_list[nextpoint-1]+prob_list[i-1]
+                else:
+                    final_list[nextpoint-1]=final_list[nextpoint-1]+final_list[nextpoint-1]*prob_list[i-1]
+
+            current_pt=current_pt+1
+            print(final_list)
+
     
 
 # 绘制扑克牌

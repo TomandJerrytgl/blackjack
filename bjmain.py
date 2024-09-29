@@ -68,6 +68,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                deck = Deck()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 
@@ -112,13 +113,12 @@ def main():
                         
                 elif game_over:
                     if restart_button.is_clicked(event.pos):
-                        deck = Deck()
                         player_hand, dealer_hand = initialize_hands(deck)
                         player_turn = True
                         game_over = False
                         putting_bet=False
                         winner_text = ""
-                deck.calculate(player_hand,21)
+                deck.calculate_prob(player_hand,21)
         
         #结算金钱
         if game_over:

@@ -119,10 +119,10 @@ class Deck:
     for i in range(13):
         deck_calc.append([0,0,0,0])
 
-    def face_to_int(self, str):
+    def face_convert(self, str):
         # 把 Card Face 转化成可以用在deck_calc数据结构中对应位置的 integer
         if str.isdigit():
-            return int(str)
+            return int(str)-1
         else:
             face_map = {'♠️': 0, '♥️': 1, '♦️': 2, '♣️': 3, "A":0, "J":10, "Q":11, "K":12}
             return face_map.get(str, -1)  # Returns -1 if the suit is not found
@@ -151,8 +151,8 @@ class Deck:
             total_tmp += 1
 
             #初始化deck_calc
-            self.deck_calc[self.face_to_int(card_tmp.value)]\
-                [self.face_to_int(card_tmp.suit)] += 1
+            self.deck_calc[self.face_convert(card_tmp.value)]\
+                [self.face_convert(card_tmp.suit)] += 1
             
         self.deck_dict["total"] = total_tmp
 
@@ -195,22 +195,45 @@ class Deck:
         print(tabulate(dict_table))
 
         dict["total"] = total_tmp
-        print("total: {}".format(dict["total"]))
+        # print("total: {}".format(dict["total"]))
+
+        print(self.deck_calc)
 
 
     
     def deal(self):
         print("_____________________dealling_______________")
         x = self.cards.pop()
-        # Update the status (remove the poped card from the status)
+        # 抽卡之后更新显示牌库(deck_dict), 计算牌库(deck_calc), 已抽卡片(drawed_dict)
         self.deck_dict[(x.suit,x.value)] = self.deck_dict[(x.suit,x.value)]-1
         self.drawed_dict[(x.suit,x.value)] = self.drawed_dict[(x.suit,x.value)]+1
+
+        val_int = self.face_convert(x.value)
+        suit_int = self.face_convert(x.suit)
+        self.deck_calc[val_int][suit_int] -= 1
 
         self.read(self.deck_dict)
         self.read(self.drawed_dict)
         return x
+    
+    def deck_calc_convert(self, list):
+        # 把 Deck_calc 里面每一种面值不同花色的牌都合并, 计算出 A, 1, ..., K 分别有多少张
+        # Output: list
+            # elements: int
+            # len: 13
+        list_tmp = []
+        for i in range(len(list)):
+            sum_tmp = 0
+            for j in list[i]:
+                sum_tmp += int(j)
 
-    def calculate(self, hand, n):
+            if i<=9:
+                list_tmp.append(sum_tmp)
+            else:
+                list_tmp[9] += sum_tmp
+        return list_tmp
+
+    def calculate_prob(self, hand, n):
         # Variables
             # hand: list of card
                 # Coudl be player_hand, or dealer_hand
@@ -218,9 +241,10 @@ class Deck:
                 # Target total value
 
         # 根据已经被抽的牌, 算出未来牌的概率
-        used_cards = self.deck_dict
-        
+        calc_data = self.deck_calc_convert(self.deck_calc)
+
         pdb.set_trace()
+        
 
         # 计算手上牌的总和
         sum_hand = 0

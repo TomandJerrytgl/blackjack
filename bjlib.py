@@ -1,3 +1,5 @@
+from bdb import set_trace
+
 import pygame
 import random
 import pdb
@@ -245,7 +247,8 @@ class Deck:
         #       1-21: 停留在这些手牌总和的概率
 
         # 初始化概率列表
-        hand_end_prob = [0]*22
+        # 第0位代表爆牌的概率. 第n位代表手牌总和为n的概率 (1<=n<=21).
+        hand_end_prob = [1]*22
 
         # 计算最终面值概率的主循环. 结束条件: 牌库所有的牌都被计算一遍.
         deck = copy.deepcopy(calc_data)
@@ -271,26 +274,58 @@ class Deck:
             # index_of_greatest +1, 因为卡面为10的牌是在 index 9. 这里要返回卡面
             card_face = index_of_greatest+1
 
-            # deck[index_of_greatest] +1, 因为计算抽到的卡面的概率, 需要考虑刚刚它还在牌堆里的情况
-            card_prob = Decimal(deck[index_of_greatest]+1)/Decimal(deck_total)
+            # deck[index_of_greatest] +1, 因为这张卡已经被抽出了, 需要考虑刚刚它还在牌堆里的情况 (算概率时)
+            card_prob = Decimal(deck[index_of_greatest]+1)/Decimal(deck_total+1)
             return card_face, card_prob
 
+        def sum_first_element(_list):
+            _sum = 0
+            for i in _list:
+                _sum += i[0]
+            return _sum
+
+        stop_point = 17
         while deck_total != 0:
-            next_card, next_card_prob =  pop_greatest()
-            # 选出概率最大的牌
-            print(f"卡: {next_card}, 概率: {next_card_prob}")
+            next_card_face, next_card_prob =  pop_greatest() # 选出概率最大的牌
+            # print(f"卡: {next_card_face}, 概率: {next_card_prob}")
+            this_hand_face = hand_start+next_card_face
+            this_hand_prob = 1*next_card_prob # TODO Bug maybe
 
-            #
+            print(f"Hand {this_hand_face} prob is {this_hand_prob}")
 
 
-        pdb.set_trace()
+            # 抽概率最大的牌, 直到手牌总和大于或等于17
+            while this_hand_face <17:
+                next_card_face, next_card_prob = pop_greatest()
+                this_hand_face += next_card_face
+                this_hand_prob *= next_card_prob # TODO Bug maybe
+                print(f"Hand {this_hand_face} prob is {this_hand_prob}")
+
+            # 抽完
+            if this_hand_face > 21:
+                hand_end_prob[0] *= this_hand_prob
+            else:
+                hand_end_prob[this_hand_face] *= this_hand_prob
+
+        # 遍历一遍 hand_end_prob, 里面数值为 1 的 element 代表没有被改变过.
+        for i in range(len(hand_end_prob)):
+            if hand_end_prob[i] == 1:
+                hand_end_prob[i] = 0
+            else:
+                hand_end_prob[i] *= 100 # 变为百分比
+
+        # 打印 17-21 的概率
+        # for i in range(len(hand_end_prob)):
+        #     if i>=17:
+        #         print(f"Chance of end at {i} is {hand_end_prob[i]}.")
+
+
         # 算出抽到某张牌的概率. 然后加到对应的最终面值上.
         # 情况1: 没有爆
         #   将此刻的面值概率加上
         #   再次加上概率面值
         # 情况2: 爆了
-
-        return
+        return hand_end_prob
 
 
     def calculate_prob(self, hand, n):
@@ -307,14 +342,14 @@ class Deck:
         for i in range(len(hand)):
             if hand[i].value in ("A"):
                 sum_hand += 1
-            elif hand[i].value in ("J", "Q", "K"):
+            elif hand[i].value in ("J",  "Q", "K"):
                 sum_hand += 10
             else:
                 sum_hand += int(hand[i].value)
 
 
         prob_list = self.get_prob_list(sum_hand, calc_data)
-
+        print(prob_list)
 
 
 

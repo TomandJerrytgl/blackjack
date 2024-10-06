@@ -119,6 +119,8 @@ def main():
                         putting_bet=False
                         winner_text = ""
                 deck.calculate_prob(player_hand,21)
+                # pdb.set_trace()
+
         
         #结算金钱
         if game_over:

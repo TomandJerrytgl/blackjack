@@ -36,10 +36,10 @@ def main():
     #buttonlist=[]
     #buttton_pos=[]
 
-    deal_button=Button((500, 500), "Deal")
-    hit_button = Button((100, 500), "Hit")
-    stand_button = Button((300, 500), "Stand")
-    restart_button = Button((500, 500), "Restart")
+    deal_button=Button((500, 700), "Deal")
+    hit_button = Button((100, 700), "Hit")
+    stand_button = Button((300, 700), "Stand")
+    restart_button = Button((500, 700), "Restart")
     quit_button=Button((1400, 800), "Quit")
    
     #Setting bet设置金额
@@ -75,7 +75,7 @@ def main():
                 if quit_button.is_clicked(event.pos):
                     running=False
                     pygame.quit()  # 关闭Pygame
-                    sys.exit()
+                    #sys.exit()
                 if player_turn and not putting_bet and not game_over:
                     if chips_5.is_clicked(event.pos):
                         current_money=current_money-chips_5.value
@@ -162,8 +162,8 @@ def main():
             Spacing = 50
             for i, card in enumerate(player_hand):
                 draw_card(card, 100 + i * (card.width+Spacing), 400)
-            for i, card in enumerate(dealer_hand):
-                draw_card(card, 100 + i * (card.width+Spacing), 100)
+            
+            draw_card(dealer_hand[1], 100 , 100)
 
         elif game_over:
             restart_button.draw_button(screen)

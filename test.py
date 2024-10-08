@@ -24,7 +24,7 @@ def procalfunc(currentlist, currentvalue, currentprob):
             problist = procalfunc(curlist, curval, curprob)
             endprob = [x + y for x, y in zip(problist, endprob)]
 
-            print(orival,curval)
+            #print(orival,curval)
             curval=orival
         else:
             curlist[maxinde] += 1
@@ -37,9 +37,9 @@ def procalfunc(currentlist, currentvalue, currentprob):
     return endprob
 
 # Test input
-#cardlist = [12, 12, 12, 12, 12, 11, 12, 12, 12, 48]
-#face = 3
-#prob_end = procalfunc(cardlist, face, 1)
+cardlist = [12, 12, 12, 12, 12, 12, 12, 12, 12, 27]
+face = 12
+prob_end = procalfunc(cardlist, face, 1)
 
-#print("Final probabilities:", prob_end)
-#print(sum(prob_end))
+print("Final probabilities:", prob_end)
+print(sum(prob_end))

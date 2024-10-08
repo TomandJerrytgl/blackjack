@@ -1,9 +1,11 @@
+from bjlib import *
+from bjfunc import *
 
 import pygame
 import random
 import pdb
 from tabulate import tabulate
-from bjlib import Deck, Chip, Button,initialize_hands,draw_card,calculate_hand_value,check_winner,check_reward
+#from bjlib import Deck, Chip, Button,initialize_hands,draw_card,calculate_hand_value,check_winner,check_reward
 
 def main():
     # 初始化Pygame

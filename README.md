@@ -57,5 +57,5 @@ py -3.11 -m unittest -v test_blackjack test_probability
 所有阶段接受 `(screen, clock, stage_info)`，通过修改 `stage_name` 切换，
 每帧只读取一次事件。存档不支持恢复一局中途的操作。
 
-仓库原有的 `bjmain.py`、`blackjack.py` 等文件作为历史版本保留；
-当前 Pygame 版本的入口是 `main.py`。
+当前 Pygame 版本的入口是 `main.py`。2024 年旧版文件已从当前分支移除，
+仍可通过 Git 提交历史查看或恢复。
